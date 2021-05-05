@@ -1,23 +1,24 @@
 package com.company;
 
 class Task1 {
-    static volatile int x = 0;
-    static volatile int count = 0;
-    static Object lock = new Object();
+    static  int count = 0;
 
     static class  LuckyThread extends Thread {
+        private static int x;
         @Override
         public void run() {
-            synchronized (lock) {
-                while (x < 999999) {
-                    x++;
-                    if ((x % 10) + (x / 10) % 10 + (x / 100) % 10 == (x / 1000)
-                            % 10 + (x / 10000) % 10 + (x / 100000) % 10) {
-                        System.out.println(x);
-                        count++;
-                    }
+            while (x < 999999) {
+                    iterate();
                 }
             }
+
+        static synchronized void iterate() {
+            x++;
+            if ((x % 10) + (x / 10) % 10 + (x / 100) % 10 != (x / 1000) % 10 + (x / 10000) % 10 + (x / 100000) % 10 ||
+                    x > 999999)
+                return;
+            System.out.println(x);
+            count++;
         }
     }
 
